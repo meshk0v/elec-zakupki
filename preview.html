@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Превью — Закупки</title>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@900&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f5f5f3; --ink: #141414; --muted: #6b6b6b; --line: #e3e3e3; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 "Work Sans", system-ui, sans-serif; }
+  .signal { height: 6px; background: repeating-linear-gradient(-45deg, #fff200 0 14px, #141414 14px 28px); }
+  header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 24px; }
+  h1 { margin: 0; font: 900 26px/1.1 "Tektur", sans-serif; text-transform: uppercase; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; }
+  .bar button, .bar a { padding: 8px 14px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font: inherit; cursor: pointer; text-decoration: none; color: inherit; }
+  .bar button.on { background: #fff200; border-color: #141414; font-weight: 600; }
+  .bar a { background: #141414; color: #fff; border-color: #141414; }
+  .stage { display: flex; gap: 32px; align-items: flex-start; padding: 8px 24px 40px; overflow-x: auto; }
+  figure { margin: 0; flex-shrink: 0; }
+  figcaption { margin-bottom: 8px; font-weight: 600; }
+  figcaption span { color: var(--muted); font-weight: 400; }
+  .frame { border: 10px solid #141414; border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 20px 40px -20px rgba(0,0,0,.35); }
+  .frame--phone { border-radius: 28px; }
+  .scaler { transform-origin: 0 0; }
+  iframe { display: block; border: 0; }
+</style>
+</head>
+<body>
+<div class="signal"></div>
+<header>
+  <h1>Закупки · 3 разрешения</h1>
+  <div class="bar">
+    <button data-t="light" class="on">День</button>
+    <button data-t="night">Ночь · Графит</button>
+    <button data-t="blueprint">Ночь · Чертёж</button>
+    <a href="./">Открыть страницу</a>
+  </div>
+</header>
+<div class="stage">
+  <figure><figcaption>Десктоп <span>1440 × 900</span></figcaption>
+    <div class="frame" data-w="1440" data-h="900" data-s=".5"></div></figure>
+  <figure><figcaption>Планшет <span>820 × 1180</span></figcaption>
+    <div class="frame" data-w="820" data-h="1180" data-s=".5"></div></figure>
+  <figure><figcaption>Мобильный <span>390 × 844</span></figcaption>
+    <div class="frame frame--phone" data-w="390" data-h="844" data-s=".7"></div></figure>
+</div>
+<script>
+  var frames = [].slice.call(document.querySelectorAll('.frame'));
+  function load(theme) {
+    frames.forEach(function (f) {
+      var w = +f.dataset.w, h = +f.dataset.h, s = +f.dataset.s;
+      f.style.width = w * s + 'px'; f.style.height = h * s + 'px';
+      f.innerHTML = '<div class="scaler" style="width:' + w + 'px;height:' + h + 'px;transform:scale(' + s + ')">' +
+        '<iframe src="./?theme=' + theme + '" width="' + w + '" height="' + h + '" title="Превью ' + w + 'px"></iframe></div>';
+    });
+  }
+  document.querySelectorAll('[data-t]').forEach(function (b) {
+    b.onclick = function () {
+      document.querySelectorAll('[data-t]').forEach(function (x) { x.classList.toggle('on', x === b); });
+      load(b.dataset.t);
+    };
+  });
+  load('light');
+</script>
+</body>
+</html>
